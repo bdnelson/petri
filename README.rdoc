@@ -1,0 +1,9 @@
+= PTNet: Petri-net Simulation in Ruby
+===== Brian D Nelson <bdnelson@wildcoder.com>
+
+== Overview
+This package provides a ruby based simulation package for Petri nets.
+
+
+== Petri Net Resources
+* http://en.wikipedia.org/wiki/Petri_net - Wikipedia
