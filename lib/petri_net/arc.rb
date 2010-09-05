@@ -1,25 +1,3 @@
-#--
-# Copyright (c) 2009, Brian D. Nelson (bdnelson@gmail.com)
-# 
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-# 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#++
-
 module PetriNet
 	# Arc
 	class Arc < PetriNet::Base
@@ -35,13 +13,14 @@ module PetriNet
 			@name = (options[:name] or "Arc#{@id}")
 			@description = (options[:description] or "Arc #{@id}")
 			@weight = (options[:weight] or 1)
-			self.add_source(options[:source]) unless options[:source] == nil
-			self.add_destination(options[:destination]) unless options[:destination] == nil
+			self.add_source(options[:source]) unless options[:source].nil?
+			self.add_destination(options[:destination]) unless options[:destination].nil?
 			
 			yield self unless block == nil
 		end	
 		
-		# Add a source object
+		# Add a source object to this arc.  Validation of the source object will be performed
+		# before the object is added to the arc and an exception will be raised.
 		def add_source(object)
 			if validate_source_destination(object)
 				@source = object
@@ -69,12 +48,12 @@ module PetriNet
 
 		# Validate this arc.
 		def validate
-			if @id < 1 then return false end
-			if @name == nil or @name.length <= 0 then return false end
-			if @weight < 1 then return false end
-			if @source == nil or @destination == nil then return false end
-			if @source == @destination then return false end
-			if @source.class == @destination.class then return false end
+			return false if @id < 1
+			return false if @name.nil? or @name.length <= 0
+			return false if @weight < 1
+			return false if @source.nil? or @destination.nil?
+			return false if @source == @destination
+			return false if @source.class == @destination.class
 			return true
 		end
 
@@ -91,12 +70,11 @@ module PetriNet
 
 		# Validate source or destination object
 		def validate_source_destination(object)
-			if object == nil then return false end
-			if object.class.to_s != "PetriNet::Place" and object.class.to_s != "PetriNet::Transition"
-				return false
-			end
-			if @source != nil and @source.class.to_s == object.class.to_s then return false end
-			if @destination != nil and @destination.class.to_s == object.class.to_s then return false end
+			return if object.nil?
+			return false if object.class.to_s != "PetriNet::Place" and object.class.to_s != "PetriNet::Transition"
+
+			return if @source.nil? or @source.class.to_s == object.class.to_s
+			return if @destination.nil? or @destination.class.to_s == object.class.to_s
 			return true
 		end
 	end 

@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2009, Brian D. Nelson (bdnelson@gmail.com)
+# Copyright (c) 2009, Brian D. Nelson (bdnelson@wildcoder.com)
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,7 @@
 
 PETRI_LIB_FILE_PATH = File.dirname(__FILE__)
 require "#{PETRI_LIB_FILE_PATH}/petri_net/base"
+require "#{PETRI_LIB_FILE_PATH}/petri_net/net"
 require "#{PETRI_LIB_FILE_PATH}/petri_net/place"
 require "#{PETRI_LIB_FILE_PATH}/petri_net/transition"
 require "#{PETRI_LIB_FILE_PATH}/petri_net/arc"
